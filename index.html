@@ -11,11 +11,11 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
 
 <head>
     <!-- Bootstrap Core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <link rel="stylesheet" href="animate.min.css">
   
-  <title>340</title>
+  <title>340 M.D.A.S.</title>
 
 </head>
 
@@ -23,7 +23,7 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
   <div>
     <h1>340 M.D.A.S.</h1>
   </div>
-    <br><br>
+    <br>
 
   <div class="main-content">
 
@@ -32,24 +32,36 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
       <span id="motion"></span>
       <br><br>
 
-      <button type="button" class="button" onClick="activate()">Activate Alarm</button>
-      <button type="button" class="button" onClick="deactivate()">Deactivate Alarm</button>
+      <button type="button" class="alarm-activate button" onClick="activate()">Activate Alarm</button>
+      <button type="button" class="alarm-deactivate button" onClick="deactivate()">Deactivate Alarm</button>
+
     </div>
 
     <!-- RIGHT COLUMN -->
     <div class="column">
-      <textarea class="log" readonly rows="10"></textarea>
+      <textarea class="log" readonly rows="11"></textarea>
     </div>
+
   </div>
+
+  <br/>
+  View on&nbsp;<a href="https://github.com/skhzhang/particle-core-MDAS">Github</a>
 
   <!-- JavaScript for detection -->
   <script type="text/javascript">
 
   // initialize log
   var log = document.getElementsByClassName("log")[0];
+  var alarmActivateButton = document.getElementsByClassName("alarm-activate")[0];
+  var alarmDeactivateButton = document.getElementsByClassName("alarm-deactivate")[0];
+
+  // default to false; cache keeps button disabled on refresh
+  alarmActivateButton.disabled = false;
+  alarmDeactivateButton.disabled = false;
 
   // activate alarm system and detection
   function activate() {
+
       document.getElementById("motion").innerHTML = "Alarm ON";
       var deviceID = "54ff6f066672524819140167";
       var accessToken = "4cae21bba3ad6cfce52c347b96bb65bc4d3dbc46";
@@ -74,6 +86,11 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
           var currentTime2String = new Date().toLocaleString("en-US");
           log.innerHTML = currentTime2String + " - Motion detected\n" + log.innerHTML;
       }, false);
+
+      // disable button if pressed, enable other button
+      alarmActivateButton.disabled = true;
+      alarmDeactivateButton.disabled = false;
+
   }
 
   // deactivate alarm system and detection
@@ -87,6 +104,10 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
     // log time
     var currentTime2String = new Date().toLocaleString("en-US");
     log.innerHTML = currentTime2String + " - Alarm turned off\n" + log.innerHTML;
+
+    // disable button if pressed, enable other button
+    alarmActivateButton.disabled = false;
+    alarmDeactivateButton.disabled = true;
   }
 
   </script>
