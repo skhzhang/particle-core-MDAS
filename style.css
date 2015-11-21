@@ -5,6 +5,12 @@ Team 6
 CSS Style Sheet
 */
 
+html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
+}
 
 body {
     text-align: center;
@@ -25,6 +31,34 @@ h1{
 }
 
 .button{
-	width: 650px;
+	width: 450px;
 	color: black;
+}
+
+.main-content {
+  	max-width: 1080px;
+	margin-left: auto;
+	margin-right: auto;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: stretch;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+.column {
+	width: 50%;
+	text-align: center;
+
+}
+
+.log {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12pt;
+	color: black;
+
+	width: 100%;
+	padding: 5px;
+
 }

@@ -23,42 +23,72 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
   <div>
     <h1>340 M.D.A.S.</h1>
   </div>
-  <br><br>
-    <span id="motion"></span><br>
-
     <br><br>
-  <button type="button" class="button" onClick="activate()">Activate Alarm</button>
-  <br><br>
-  <button type="button" class="button" onClick="deactivate()">Deactivate Alarm</button>
 
-    <script type="text/javascript">
-    function activate() {
+  <div class="main-content">
 
-        document.getElementById("motion").innerHTML = "Alarm ON";
-        var deviceID = "54ff6f066672524819140167";
-        var accessToken = "4cae21bba3ad6cfce52c347b96bb65bc4d3dbc46";
-        var eventSource = new EventSource("https://api.spark.io/v1/devices/" + deviceID + "/events/?access_token=" + accessToken);
-    
-        eventSource.addEventListener('open', function(e) {
-            console.log("Opened!"); },false);
+    <!-- LEFT COLUMN -->
+    <div class="column">
+      <span id="motion"></span>
+      <br><br>
 
-        eventSource.addEventListener('error', function(e) {
-            console.log("Errored!"); },false);
+      <button type="button" class="button" onClick="activate()">Activate Alarm</button>
+      <button type="button" class="button" onClick="deactivate()">Deactivate Alarm</button>
+    </div>
 
-        eventSource.addEventListener('pir/motion_detected', function(e) {
-            var parsedData = JSON.parse(e.data);
-            var tempSpan = document.getElementById("motion");
-            tempSpan.innerHTML = "Motion detected!!";
-            tempSpan.style.fontSize = "50px";
-      var audio = new Audio('BOMB_SIREN.mp3');
-      audio.play();
-        }, false);
-    }
+    <!-- RIGHT COLUMN -->
+    <div class="column">
+      <textarea class="log" readonly rows="10"></textarea>
+    </div>
+  </div>
+
+  <!-- JavaScript for detection -->
+  <script type="text/javascript">
+
+  // initialize log
+  var log = document.getElementsByClassName("log")[0];
+
+  // activate alarm system and detection
+  function activate() {
+      document.getElementById("motion").innerHTML = "Alarm ON";
+      var deviceID = "54ff6f066672524819140167";
+      var accessToken = "4cae21bba3ad6cfce52c347b96bb65bc4d3dbc46";
+      var eventSource = new EventSource("https://api.spark.io/v1/devices/" + deviceID + "/events/?access_token=" + accessToken);
+
+      log.scrollTop = 0; // scroll back to top
+
+      // log alarm turned on
+      var currentTimeString = new Date().toLocaleString("en-US");
+      log.innerHTML = currentTimeString + " - Alarm turned on\n" + log.innerHTML;
+
+      // motion detected
+      eventSource.addEventListener('pir/motion_detected', function(e) {
+          var parsedData = JSON.parse(e.data);
+          var tempSpan = document.getElementById("motion");
+          tempSpan.innerHTML = "Motion detected!!";
+          tempSpan.style.fontSize = "50px";
+          var audio = new Audio('BOMB_SIREN.mp3');
+          audio.play();
+
+          // log motion detected
+          var currentTime2String = new Date().toLocaleString("en-US");
+          log.innerHTML = currentTime2String + " - Motion detected\n" + log.innerHTML;
+      }, false);
+  }
+
+  // deactivate alarm system and detection
   function deactivate() {
     var tempSpan = document.getElementById("motion");
-        tempSpan.innerHTML = "Alarm OFF";
+    tempSpan.innerHTML = "Alarm OFF";
     tempSpan.style.fontSize = "50px";
-    }
-    </script>
+
+    log.scrollTop = 0; // scroll back to top
+
+    // log time
+    var currentTime2String = new Date().toLocaleString("en-US");
+    log.innerHTML = currentTime2String + " - Alarm turned off\n" + log.innerHTML;
+  }
+
+  </script>
 </body>
 </html>
