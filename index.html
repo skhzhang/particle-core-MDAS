@@ -30,6 +30,7 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
     <!-- LEFT COLUMN -->
     <div class="column">
       <span id="motion"></span>
+	  <span class="animated infinite flash" id="motion_detected"></span><br>
       <br><br>
 
       <button type="button" class="alarm-activate button" onClick="activate()">Activate Alarm</button>
@@ -82,8 +83,9 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
       // motion detected
       eventSource.addEventListener('pir/motion_detected', function(e) {
           var parsedData = JSON.parse(e.data);
-          var tempSpan = document.getElementById("motion");
+          var tempSpan = document.getElementById("motion_detected");
           tempSpan.innerHTML = "Motion detected!!";
+		  document.getElementById("motion").innerHTML = "";
           tempSpan.style.fontSize = "50px";
           audio.play();
 
@@ -100,11 +102,17 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
 
   // deactivate alarm system and detection
   function deactivate() {
+  
+	eventSource.close();
+	
     audio.pause();
     audio.currentTime = 0;
-    var tempSpan = document.getElementById("motion");
-    tempSpan.innerHTML = "Alarm OFF";
-    tempSpan.style.fontSize = "50px";
+	
+    var temp = document.getElementById("motion");
+	var temp2 = document.getElementById("motion_detected");
+    temp.innerHTML = "Alarm OFF";
+	temp2.innerHTML = "";
+    //tempSpan.style.fontSize = "50px";
 
     log.scrollTop = 0; // scroll back to top
 
@@ -115,8 +123,8 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
     // disable button if pressed, enable other button
     alarmActivateButton.disabled = false;
     alarmDeactivateButton.disabled = true;
-
-    if (eventSource != null) {
+	
+	if (eventSource != null) {
         eventSource.close();
         eventSource = null;
     }
