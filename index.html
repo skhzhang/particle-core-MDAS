@@ -58,6 +58,7 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
   // default to false; cache keeps button disabled on refresh
   alarmActivateButton.disabled = false;
   alarmDeactivateButton.disabled = false;
+  var eventSource = null;
 
   // activate alarm system and detection
   function activate() {
@@ -65,8 +66,13 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
       document.getElementById("motion").innerHTML = "Alarm ON";
       var deviceID = "54ff6f066672524819140167";
       var accessToken = "4cae21bba3ad6cfce52c347b96bb65bc4d3dbc46";
-      var eventSource = new EventSource("https://api.spark.io/v1/devices/" + deviceID + "/events/?access_token=" + accessToken);
 
+      if (eventSource != null) {
+          eventSource.close();
+      }
+      
+      eventSource = new EventSource("https://api.spark.io/v1/devices/" + deviceID + "/events/?access_token=" + accessToken);
+          
       log.scrollTop = 0; // scroll back to top
 
       // log alarm turned on
@@ -108,6 +114,11 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
     // disable button if pressed, enable other button
     alarmActivateButton.disabled = false;
     alarmDeactivateButton.disabled = true;
+
+    if (eventSource != null) {
+        eventSource.close();
+        eventSource = null;
+    }
   }
 
   </script>
