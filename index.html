@@ -54,12 +54,12 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
   var log = document.getElementsByClassName("log")[0];
   var alarmActivateButton = document.getElementsByClassName("alarm-activate")[0];
   var alarmDeactivateButton = document.getElementsByClassName("alarm-deactivate")[0];
+  var audio = new Audio('BOMB_SIREN.mp3');
 
   // default to false; cache keeps button disabled on refresh
   alarmActivateButton.disabled = false;
   alarmDeactivateButton.disabled = false;
   var eventSource = null;
-
   // activate alarm system and detection
   function activate() {
 
@@ -85,7 +85,6 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
           var tempSpan = document.getElementById("motion");
           tempSpan.innerHTML = "Motion detected!!";
           tempSpan.style.fontSize = "50px";
-          var audio = new Audio('BOMB_SIREN.mp3');
           audio.play();
 
           // log motion detected
@@ -101,6 +100,8 @@ https://api.spark.io/v1/devices/events?access_token=4cae21bba3ad6cfce52c347b96bb
 
   // deactivate alarm system and detection
   function deactivate() {
+    audio.pause();
+    audio.currentTime = 0;
     var tempSpan = document.getElementById("motion");
     tempSpan.innerHTML = "Alarm OFF";
     tempSpan.style.fontSize = "50px";
